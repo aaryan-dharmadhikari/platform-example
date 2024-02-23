@@ -1,0 +1,30 @@
+# This workflow will install Python dependencies, run tests and lint. It will then deploy to our ImPaaS Cluster.
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: ImPaaS Manager
+
+on: push
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: ImPaaS-Deploy
+      id: impaas-deploy
+      uses: /impaas/impaas-deploy@v2
+      with:
+        method: PLATFORM
+        app-name: ${{ secrets.APP_NAME }}
+        deployment-token: ${{ secrets.TEAM_DEPLOYMENT_TOKEN }}
+
